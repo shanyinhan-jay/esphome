@@ -4,13 +4,22 @@ substitutions:
 esphome:
   name: $devicename
   on_boot:
-    priority: 600
-    then:
-      - lambda: 'id(boot_complete) = true;'
-      - script.execute: refresh_off_indicators
+    - priority: 600
+      then:
+        - lambda: 'id(boot_complete) = true;'
+        - script.execute: refresh_all_indicators
+    - priority: 200
+      then:
+        - delay: 5s
+        - if:
+            condition:
+              not:
+                wifi.connected:
+            then:
+              - script.execute: wifi_disconnect_blink
 
 esp8266:
-  board: nodemcu
+  board: esp01_1m
 
 logger:
 
@@ -27,6 +36,11 @@ wifi:
   ap:
     ssid: $devicename
     password: !secret ap_password
+  on_connect:
+    - script.stop: wifi_disconnect_blink
+    - script.execute: restore_indicator_1
+  on_disconnect:
+    - script.execute: wifi_disconnect_blink
 
 captive_portal:
 
@@ -46,9 +60,8 @@ globals:
     initial_value: 'false'
 
 # WS2812 指示灯策略：
-# - 继电器打开：partition + light.turn_on + transition_length: 0s（瞬间变绿）
-# - 继电器关闭：addressable_set 直接写像素（瞬间变红/熄灭）
-#   不可在 script 中使用 transition_length: 0s，也不可设置 default_transition_length: 0s（Neopixelbus 已知 bug，会导致崩溃）
+# - 颜色/亮度由 number 实体配置（Indicator On/Off RGB、Brightness），修改后立即刷新
+# - 统一用 addressable_set 写像素（script 中不可用 transition_length: 0s，Neopixelbus 已知 bug 会崩溃）
 # - boot_complete 防止启动时 restore_mode 触发 on_turn_off 在灯带未就绪时写像素
 light:
   - platform: neopixelbus
@@ -94,13 +107,9 @@ switch:
     id: relay_1
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - light.turn_on:
-          id: indicator_1
-          brightness: 25%
-          red: 0%
-          green: 100%
-          blue: 0%
-          transition_length: 0s
+      - script.execute:
+          id: set_indicator_on_state
+          led_index: 0
     on_turn_off:
       - script.execute:
           id: set_indicator_off_state
@@ -112,13 +121,9 @@ switch:
     id: relay_2
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - light.turn_on:
-          id: indicator_2
-          brightness: 25%
-          red: 0%
-          green: 100%
-          blue: 0%
-          transition_length: 0s
+      - script.execute:
+          id: set_indicator_on_state
+          led_index: 1
     on_turn_off:
       - script.execute:
           id: set_indicator_off_state
@@ -130,13 +135,9 @@ switch:
     id: relay_3
     restore_mode: ALWAYS_OFF
     on_turn_on:
-      - light.turn_on:
-          id: indicator_3
-          brightness: 25%
-          red: 0%
-          green: 100%
-          blue: 0%
-          transition_length: 0s
+      - script.execute:
+          id: set_indicator_on_state
+          led_index: 2
     on_turn_off:
       - script.execute:
           id: set_indicator_off_state
@@ -150,7 +151,7 @@ binary_sensor:
     name: "Button 1"
     id: button_1
     internal: true
-    on_press:
+    on_release:
       - switch.toggle: relay_1
 
   - platform: gpio
@@ -160,7 +161,7 @@ binary_sensor:
     name: "Button 2"
     id: button_2
     internal: true
-    on_press:
+    on_release:
       - switch.toggle: relay_2
 
   - platform: gpio
@@ -170,7 +171,7 @@ binary_sensor:
     name: "Button 3"
     id: button_3
     internal: true
-    on_press:
+    on_release:
       - switch.toggle: relay_3
 
 sensor:
@@ -183,9 +184,191 @@ sensor:
       - logger.log:
           format: "Received MQTT Illumination Value: %.2f"
           args: ['x']
-      - script.execute: refresh_off_indicators
+      - script.execute: refresh_all_indicators
 
+  - platform: wifi_signal
+    name: $devicename signal
+    update_interval: 60s
+
+# 指示灯颜色/亮度可在 Home Assistant 或 Web 界面调节，重启后保留
+number:
+  - platform: template
+    name: "Indicator Brightness"
+    id: indicator_brightness
+    optimistic: true
+    restore_value: true
+    min_value: 5
+    max_value: 100
+    step: 1
+    initial_value: 25
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    icon: mdi:brightness-6
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator On Red"
+    id: indicator_on_red
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 0
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator On Green"
+    id: indicator_on_green
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 100
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator On Blue"
+    id: indicator_on_blue
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 0
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator Off Red"
+    id: indicator_off_red
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 100
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator Off Green"
+    id: indicator_off_green
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 0
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+  - platform: template
+    name: "Indicator Off Blue"
+    id: indicator_off_blue
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100
+    step: 1
+    initial_value: 0
+    unit_of_measurement: "%"
+    mode: slider
+    entity_category: config
+    on_value:
+      - script.execute: refresh_all_indicators
+
+text_sensor:
+  - platform: wifi_info
+    ip_address:
+      name: $devicename IP Address
+      icon: mdi:ip-network
+
+    
 script:
+  - id: wifi_disconnect_blink
+    mode: restart
+    then:
+      - while:
+          condition:
+            not:
+              wifi.connected:
+          then:
+            - light.addressable_set:
+                id: ws2812_strip
+                range_from: 0
+                range_to: 0
+                red: !lambda 'return id(indicator_off_red).state / 100.0f;'
+                green: !lambda 'return id(indicator_off_green).state / 100.0f;'
+                blue: !lambda 'return id(indicator_off_blue).state / 100.0f;'
+                color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
+            - delay: 500ms
+            - light.addressable_set:
+                id: ws2812_strip
+                range_from: 0
+                range_to: 0
+                red: 0%
+                green: 0%
+                blue: 0%
+            - delay: 500ms
+
+  - id: restore_indicator_1
+    mode: restart
+    then:
+      - if:
+          condition:
+            switch.is_on: relay_1
+          then:
+            - script.execute:
+                id: set_indicator_on_state
+                led_index: 0
+          else:
+            - script.execute:
+                id: set_indicator_off_state
+                led_index: 0
+
+  - id: set_indicator_on_state
+    parameters:
+      led_index: int
+    mode: restart
+    then:
+      - if:
+          condition:
+            and:
+              - lambda: 'return id(boot_complete);'
+              - or:
+                  - lambda: 'return led_index != 0;'
+                  - wifi.connected:
+          then:
+            - light.addressable_set:
+                id: ws2812_strip
+                range_from: !lambda 'return led_index;'
+                range_to: !lambda 'return led_index;'
+                red: !lambda 'return id(indicator_on_red).state / 100.0f;'
+                green: !lambda 'return id(indicator_on_green).state / 100.0f;'
+                blue: !lambda 'return id(indicator_on_blue).state / 100.0f;'
+                color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
+
   - id: set_indicator_off_state
     parameters:
       led_index: int
@@ -193,7 +376,11 @@ script:
     then:
       - if:
           condition:
-            lambda: 'return id(boot_complete);'
+            and:
+              - lambda: 'return id(boot_complete);'
+              - or:
+                  - lambda: 'return led_index != 0;'
+                  - wifi.connected:
           then:
             - if:
                 condition:
@@ -204,10 +391,10 @@ script:
                       id: ws2812_strip
                       range_from: !lambda 'return led_index;'
                       range_to: !lambda 'return led_index;'
-                      red: 100%
-                      green: 0%
-                      blue: 0%
-                      color_brightness: 25%
+                      red: !lambda 'return id(indicator_off_red).state / 100.0f;'
+                      green: !lambda 'return id(indicator_off_green).state / 100.0f;'
+                      blue: !lambda 'return id(indicator_off_blue).state / 100.0f;'
+                      color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
                 else:
                   - light.addressable_set:
                       id: ws2812_strip
@@ -217,27 +404,39 @@ script:
                       green: 0%
                       blue: 0%
 
-  - id: refresh_off_indicators
+  - id: refresh_all_indicators
     mode: restart
     then:
       - if:
           condition:
-            switch.is_off: relay_1
+            switch.is_on: relay_1
           then:
+            - script.execute:
+                id: set_indicator_on_state
+                led_index: 0
+          else:
             - script.execute:
                 id: set_indicator_off_state
                 led_index: 0
       - if:
           condition:
-            switch.is_off: relay_2
+            switch.is_on: relay_2
           then:
+            - script.execute:
+                id: set_indicator_on_state
+                led_index: 1
+          else:
             - script.execute:
                 id: set_indicator_off_state
                 led_index: 1
       - if:
           condition:
-            switch.is_off: relay_3
+            switch.is_on: relay_3
           then:
+            - script.execute:
+                id: set_indicator_on_state
+                led_index: 2
+          else:
             - script.execute:
                 id: set_indicator_off_state
                 led_index: 2
