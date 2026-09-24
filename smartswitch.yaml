@@ -190,11 +190,12 @@ sensor:
     name: $devicename signal
     update_interval: 60s
 
-# 指示灯颜色/亮度可在 Home Assistant 或 Web 界面调节，重启后保留
+# 指示灯颜色/亮度仅设备 Web 页可调（internal：不暴露给 HA/API/MQTT），重启后保留
 number:
   - platform: template
     name: "Indicator Brightness"
     id: indicator_brightness
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 5
@@ -211,6 +212,7 @@ number:
   - platform: template
     name: "Indicator On Red"
     id: indicator_on_red
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -225,6 +227,7 @@ number:
   - platform: template
     name: "Indicator On Green"
     id: indicator_on_green
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -239,6 +242,7 @@ number:
   - platform: template
     name: "Indicator On Blue"
     id: indicator_on_blue
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -253,6 +257,7 @@ number:
   - platform: template
     name: "Indicator Off Red"
     id: indicator_off_red
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -267,6 +272,7 @@ number:
   - platform: template
     name: "Indicator Off Green"
     id: indicator_off_green
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -281,6 +287,7 @@ number:
   - platform: template
     name: "Indicator Off Blue"
     id: indicator_off_blue
+    internal: true
     optimistic: true
     restore_value: true
     min_value: 0
