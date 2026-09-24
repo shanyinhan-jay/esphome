@@ -60,7 +60,7 @@ globals:
     initial_value: 'false'
 
 # WS2812 指示灯策略：
-# - 颜色/亮度由 number 实体配置（Indicator On/Off RGB、Brightness），修改后立即刷新
+# - 颜色由 number 配置（On/Off RGB 各 0–255），亮度仍为 0–100%；修改后立即刷新
 # - 统一用 addressable_set 写像素（script 中不可用 transition_length: 0s，Neopixelbus 已知 bug 会崩溃）
 # - boot_complete 防止启动时 restore_mode 触发 on_turn_off 在灯带未就绪时写像素
 light:
@@ -214,10 +214,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
     initial_value: 0
-    unit_of_measurement: "%"
     mode: slider
     entity_category: config
     on_value:
@@ -229,10 +228,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
-    initial_value: 100
-    unit_of_measurement: "%"
+    initial_value: 255
     mode: slider
     entity_category: config
     on_value:
@@ -244,10 +242,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
     initial_value: 0
-    unit_of_measurement: "%"
     mode: slider
     entity_category: config
     on_value:
@@ -259,10 +256,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
-    initial_value: 100
-    unit_of_measurement: "%"
+    initial_value: 255
     mode: slider
     entity_category: config
     on_value:
@@ -274,10 +270,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
     initial_value: 0
-    unit_of_measurement: "%"
     mode: slider
     entity_category: config
     on_value:
@@ -289,10 +284,9 @@ number:
     optimistic: true
     restore_value: true
     min_value: 0
-    max_value: 100
+    max_value: 255
     step: 1
     initial_value: 0
-    unit_of_measurement: "%"
     mode: slider
     entity_category: config
     on_value:
@@ -318,9 +312,9 @@ script:
                 id: ws2812_strip
                 range_from: 0
                 range_to: 0
-                red: !lambda 'return id(indicator_off_red).state / 100.0f;'
-                green: !lambda 'return id(indicator_off_green).state / 100.0f;'
-                blue: !lambda 'return id(indicator_off_blue).state / 100.0f;'
+                red: !lambda 'return id(indicator_off_red).state / 255.0f;'
+                green: !lambda 'return id(indicator_off_green).state / 255.0f;'
+                blue: !lambda 'return id(indicator_off_blue).state / 255.0f;'
                 color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
             - delay: 500ms
             - light.addressable_set:
@@ -364,9 +358,9 @@ script:
                 id: ws2812_strip
                 range_from: !lambda 'return led_index;'
                 range_to: !lambda 'return led_index;'
-                red: !lambda 'return id(indicator_on_red).state / 100.0f;'
-                green: !lambda 'return id(indicator_on_green).state / 100.0f;'
-                blue: !lambda 'return id(indicator_on_blue).state / 100.0f;'
+                red: !lambda 'return id(indicator_on_red).state / 255.0f;'
+                green: !lambda 'return id(indicator_on_green).state / 255.0f;'
+                blue: !lambda 'return id(indicator_on_blue).state / 255.0f;'
                 color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
 
   - id: set_indicator_off_state
@@ -391,9 +385,9 @@ script:
                       id: ws2812_strip
                       range_from: !lambda 'return led_index;'
                       range_to: !lambda 'return led_index;'
-                      red: !lambda 'return id(indicator_off_red).state / 100.0f;'
-                      green: !lambda 'return id(indicator_off_green).state / 100.0f;'
-                      blue: !lambda 'return id(indicator_off_blue).state / 100.0f;'
+                      red: !lambda 'return id(indicator_off_red).state / 255.0f;'
+                      green: !lambda 'return id(indicator_off_green).state / 255.0f;'
+                      blue: !lambda 'return id(indicator_off_blue).state / 255.0f;'
                       color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
                 else:
                   - light.addressable_set:
