@@ -1,5 +1,13 @@
 substitutions:
   devicename: smartswitch
+  # 仅作 Web「HA Illuminance Entity ID」首次默认值；之后请在设备 Web 修改
+  ha_illuminance_entity: sensor.outdoor_illuminance
+
+# 本地组件：须与 smartswitch.yaml 同目录存在 components/ha_entity_sensor/（HA 上即 /config/components/...）
+external_components:
+  - source:
+      type: local
+      path: components
 
 esphome:
   name: $devicename
@@ -46,12 +54,8 @@ captive_portal:
 
 web_server:
   port: 80
-
-# MQTT 仅用于订阅外部光照传感器；discovery 关闭，避免与 ESPHome API 集成重复创建实体
-mqtt:
-  broker: 192.168.1.250
-  port: 1883
-  discovery: false
+  # internal 实体默认不在 Web 列出；开启后仅本地页可调，仍不进入 HA/API
+  include_internal: true
 
 globals:
   - id: boot_complete
@@ -174,15 +178,21 @@ binary_sensor:
     on_release:
       - switch.toggle: relay_3
 
-sensor:
-  - platform: mqtt_subscribe
-    name: "Outdoor Illumination"
-    id: outdoor_illumination
+button:
+  - platform: restart
+    id: device_restart
     internal: true
-    topic: esphome/sensor/outloor_illumination
+    name: "Device Restart Internal"
+
+sensor:
+  # 启动时按 Web 中 entity_id 订阅 HA 状态（Native API，等同 homeassistant 平台）
+  - platform: ha_entity_sensor
+    id: outdoor_illumination
+    entity_id_text_id: ha_illuminance_entity_id
+    internal: true
     on_value:
       - logger.log:
-          format: "Received MQTT Illumination Value: %.2f"
+          format: "HA illuminance: %.2f"
           args: ['x']
       - script.execute: refresh_all_indicators
 
@@ -190,8 +200,45 @@ sensor:
     name: $devicename signal
     update_interval: 60s
 
-# 指示灯颜色/亮度仅设备 Web 页可调（internal：不暴露给 HA/API/MQTT），重启后保留
+# 光照：Web 配置 entity_id / 阈值（internal，不进 HA）；改 entity_id 后自动重启以重新订阅
+text:
+  - platform: template
+    name: "HA Illuminance Entity ID"
+    id: ha_illuminance_entity_id
+    internal: true
+    optimistic: true
+    restore_value: true
+    initial_value: "${ha_illuminance_entity}"
+    min_length: 3
+    max_length: 64
+    mode: text
+    entity_category: config
+    icon: mdi:home-assistant
+    on_value:
+      - if:
+          condition:
+            lambda: 'return id(boot_complete);'
+          then:
+            - delay: 1s
+            - button.press: device_restart
+
 number:
+  - platform: template
+    name: "Illuminance Dark Threshold"
+    id: illuminance_dark_threshold
+    internal: true
+    optimistic: true
+    restore_value: true
+    min_value: 0
+    max_value: 100000
+    step: 1
+    initial_value: 100
+    mode: box
+    entity_category: config
+    icon: mdi:brightness-5
+    on_value:
+      - script.execute: refresh_all_indicators
+
   - platform: template
     name: "Indicator Brightness"
     id: indicator_brightness
@@ -305,7 +352,6 @@ text_sensor:
       name: $devicename IP Address
       icon: mdi:ip-network
 
-    
 script:
   - id: wifi_disconnect_blink
     mode: restart
@@ -386,7 +432,8 @@ script:
             - if:
                 condition:
                   lambda: |-
-                    return !isnan(id(outdoor_illumination).state) && id(outdoor_illumination).state < 100.0f;
+                    return !isnan(id(outdoor_illumination).state) &&
+                           id(outdoor_illumination).state < id(illuminance_dark_threshold).state;
                 then:
                   - light.addressable_set:
                       id: ws2812_strip
