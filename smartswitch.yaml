@@ -178,12 +178,6 @@ binary_sensor:
     on_release:
       - switch.toggle: relay_3
 
-button:
-  - platform: restart
-    id: device_restart
-    internal: true
-    name: "Device Restart Internal"
-
 sensor:
   # 启动时按 Web 中 entity_id 订阅 HA 状态（Native API，等同 homeassistant 平台）
   - platform: ha_entity_sensor
@@ -220,7 +214,8 @@ text:
             lambda: 'return id(boot_complete);'
           then:
             - delay: 1s
-            - button.press: device_restart
+            - lambda: |-
+                App.safe_reboot();
 
 number:
   - platform: template
