@@ -1,5 +1,5 @@
 substitutions:
-  devicename: smartswitch
+  devicename: smartswitch-3
   # 仅作 Web「HA Illuminance Entity ID」首次默认值；之后请在设备 Web 修改
   ha_illuminance_entity: sensor.outdoor_illuminance
 
@@ -9,7 +9,7 @@ external_components:
       type: local
       path: components
 
-# 三路固件（与 smartswitch_3.yaml 逻辑相同，devicename 可不同）；1/2 路请编译 smartswitch_1.yaml / smartswitch_2.yaml
+# 三路固件：3 继电器 / 3 按键 / 3 颗 WS2812；窗帘 2 路=1↔2、3 路=1↔3（见 Curtain Channel Count）
 esphome:
   name: $devicename
   on_boot:

@@ -1,15 +1,13 @@
 substitutions:
-  devicename: smartswitch
-  # 仅作 Web「HA Illuminance Entity ID」首次默认值；之后请在设备 Web 修改
+  devicename: smartswitch-2
   ha_illuminance_entity: sensor.outdoor_illuminance
 
-# 本地组件：须与 smartswitch.yaml 同目录存在 components/ha_entity_sensor/（HA 上即 /config/components/...）
 external_components:
   - source:
       type: local
       path: components
 
-# 三路固件（与 smartswitch_3.yaml 逻辑相同，devicename 可不同）；1/2 路请编译 smartswitch_1.yaml / smartswitch_2.yaml
+# 双路固件：沿用三路板上的通道 1 与 3（GPIO12/14/LED0 + GPIO5/2/LED2）；灯带仍为 3 颗，中间不占用
 esphome:
   name: $devicename
   on_boot:
@@ -55,7 +53,6 @@ captive_portal:
 
 web_server:
   port: 80
-  # internal 实体默认不在 Web 列出；开启后仅本地页可调，仍不进入 HA/API
   include_internal: true
 
 globals:
@@ -64,10 +61,6 @@ globals:
     restore_value: no
     initial_value: 'false'
 
-# WS2812 指示灯策略：
-# - 颜色由 number 配置（On/Off RGB 各 0–255），亮度仍为 0–100%；修改后立即刷新
-# - 统一用 addressable_set 写像素（script 中不可用 transition_length: 0s，Neopixelbus 已知 bug 会崩溃）
-# - boot_complete 防止启动时 restore_mode 触发 on_turn_off 在灯带未就绪时写像素
 light:
   - platform: neopixelbus
     type: GRB
@@ -93,15 +86,6 @@ light:
     internal: true
     segments:
       - id: ws2812_strip
-        from: 1
-        to: 1
-
-  - platform: partition
-    name: "Indicator 3"
-    id: indicator_3
-    internal: true
-    segments:
-      - id: ws2812_strip
         from: 2
         to: 2
 
@@ -114,18 +98,9 @@ switch:
     on_turn_on:
       - if:
           condition:
-            and:
-              - switch.is_on: curtain_mode
-              - lambda: 'return id(curtain_channel_count).state == "2";'
+            switch.is_on: curtain_mode
           then:
             - switch.turn_off: relay_2
-      - if:
-          condition:
-            and:
-              - switch.is_on: curtain_mode
-              - lambda: 'return id(curtain_channel_count).state == "3";'
-          then:
-            - switch.turn_off: relay_3
       - script.execute:
           id: set_indicator_on_state
           led_index: 0
@@ -135,37 +110,14 @@ switch:
           led_index: 0
 
   - platform: gpio
-    pin: GPIO13
+    pin: GPIO5
     name: "Relay 2"
     id: relay_2
     restore_mode: ALWAYS_OFF
     on_turn_on:
       - if:
           condition:
-            and:
-              - switch.is_on: curtain_mode
-              - lambda: 'return id(curtain_channel_count).state == "2";'
-          then:
-            - switch.turn_off: relay_1
-      - script.execute:
-          id: set_indicator_on_state
-          led_index: 1
-    on_turn_off:
-      - script.execute:
-          id: set_indicator_off_state
-          led_index: 1
-
-  - platform: gpio
-    pin: GPIO5
-    name: "Relay 3"
-    id: relay_3
-    restore_mode: ALWAYS_OFF
-    on_turn_on:
-      - if:
-          condition:
-            and:
-              - switch.is_on: curtain_mode
-              - lambda: 'return id(curtain_channel_count).state == "3";'
+            switch.is_on: curtain_mode
           then:
             - switch.turn_off: relay_1
       - script.execute:
@@ -176,7 +128,6 @@ switch:
           id: set_indicator_off_state
           led_index: 2
 
-  # 窗帘模式：最外侧两路互斥（2 路→1↔2，3 路→1↔3；中间通道 2 在 3 路模式下不参与互斥）
   - platform: template
     name: "Curtain Mode"
     id: curtain_mode
@@ -189,19 +140,10 @@ switch:
       - if:
           condition:
             and:
-              - lambda: 'return id(curtain_channel_count).state == "2";'
               - switch.is_on: relay_1
               - switch.is_on: relay_2
           then:
             - switch.turn_off: relay_2
-      - if:
-          condition:
-            and:
-              - lambda: 'return id(curtain_channel_count).state == "3";'
-              - switch.is_on: relay_1
-              - switch.is_on: relay_3
-          then:
-            - switch.turn_off: relay_3
 
 binary_sensor:
   - platform: gpio
@@ -216,7 +158,7 @@ binary_sensor:
 
   - platform: gpio
     pin:
-      number: GPIO0
+      number: GPIO2
       mode: {input: true, pullup: true}
     name: "Button 2"
     id: button_2
@@ -224,18 +166,7 @@ binary_sensor:
     on_release:
       - switch.toggle: relay_2
 
-  - platform: gpio
-    pin:
-      number: GPIO2
-      mode: {input: true, pullup: true}
-    name: "Button 3"
-    id: button_3
-    internal: true
-    on_release:
-      - switch.toggle: relay_3
-
 sensor:
-  # 启动时按 Web 中 entity_id 订阅 HA 状态（Native API，等同 homeassistant 平台）
   - platform: ha_entity_sensor
     id: outdoor_illumination
     entity_id_text_id: ha_illuminance_entity_id
@@ -250,22 +181,6 @@ sensor:
     name: $devicename signal
     update_interval: 60s
 
-# 窗帘路数：2=最外为通道1与2；3=最外为通道1与3
-select:
-  - platform: template
-    name: "Curtain Channel Count"
-    id: curtain_channel_count
-    internal: true
-    optimistic: true
-    restore_value: true
-    options:
-      - "2"
-      - "3"
-    initial_option: "3"
-    entity_category: config
-    icon: mdi:numeric
-
-# 光照：Web 配置 entity_id / 阈值（internal，不进 HA）；改 entity_id 后自动重启以重新订阅
 text:
   - platform: template
     name: "HA Illuminance Entity ID"
@@ -538,19 +453,15 @@ script:
           then:
             - script.execute:
                 id: set_indicator_on_state
-                led_index: 1
-          else:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 1
-      - if:
-          condition:
-            switch.is_on: relay_3
-          then:
-            - script.execute:
-                id: set_indicator_on_state
                 led_index: 2
           else:
             - script.execute:
                 id: set_indicator_off_state
                 led_index: 2
+      - light.addressable_set:
+          id: ws2812_strip
+          range_from: 1
+          range_to: 1
+          red: 0%
+          green: 0%
+          blue: 0%
