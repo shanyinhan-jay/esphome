@@ -111,6 +111,11 @@ switch:
     id: relay_1
     restore_mode: ALWAYS_OFF
     on_turn_on:
+      - if:
+          condition:
+            switch.is_on: channel_1_2_mutex
+          then:
+            - switch.turn_off: relay_2
       - script.execute:
           id: set_indicator_on_state
           led_index: 0
@@ -125,6 +130,11 @@ switch:
     id: relay_2
     restore_mode: ALWAYS_OFF
     on_turn_on:
+      - if:
+          condition:
+            switch.is_on: channel_1_2_mutex
+          then:
+            - switch.turn_off: relay_1
       - script.execute:
           id: set_indicator_on_state
           led_index: 1
@@ -146,6 +156,24 @@ switch:
       - script.execute:
           id: set_indicator_off_state
           led_index: 2
+
+  # 通道 1/2 互斥（仅 Web 配置，不进 HA）；开启后两路不能同时吸合
+  - platform: template
+    name: "Channel 1/2 Exclusive"
+    id: channel_1_2_mutex
+    internal: true
+    optimistic: true
+    restore_mode: RESTORE_DEFAULT_OFF
+    entity_category: config
+    icon: mdi:toggle-switch-off
+    on_turn_on:
+      - if:
+          condition:
+            and:
+              - switch.is_on: relay_1
+              - switch.is_on: relay_2
+          then:
+            - switch.turn_off: relay_2
 
 binary_sensor:
   - platform: gpio
