@@ -241,7 +241,7 @@ text:
     id: indicator_on_color_hex
     optimistic: true
     restore_value: true
-    initial_value: "#00FF00"
+    initial_value: "#cc00c8"
     min_length: 6
     max_length: 7
     mode: text
@@ -268,7 +268,7 @@ text:
     id: indicator_off_color_hex
     optimistic: true
     restore_value: true
-    initial_value: "#FF0000"
+    initial_value: "#05cc00"
     min_length: 6
     max_length: 7
     mode: text
@@ -319,11 +319,10 @@ number:
     id: indicator_brightness
     optimistic: true
     restore_value: true
-    min_value: 5
-    max_value: 100
+    min_value: 0
+    max_value: 255
     step: 1
-    initial_value: 25
-    unit_of_measurement: "%"
+    initial_value: 40
     mode: slider
     entity_category: config
     icon: mdi:brightness-6
@@ -354,7 +353,7 @@ script:
           if (!s.empty() && s[0] == '#') {
             s.erase(0, 1);
           }
-          int r = 0, g = 255, b = 0;
+          int r = 204, g = 0, b = 200;
           if (s.length() == 6) {
             char *end = nullptr;
             unsigned long v = strtoul(s.c_str(), &end, 16);
@@ -376,7 +375,7 @@ script:
           if (!s.empty() && s[0] == '#') {
             s.erase(0, 1);
           }
-          int r = 255, g = 0, b = 0;
+          int r = 5, g = 204, b = 0;
           if (s.length() == 6) {
             char *end = nullptr;
             unsigned long v = strtoul(s.c_str(), &end, 16);
@@ -406,7 +405,7 @@ script:
                 red: !lambda 'return id(color_work_r) / 255.0f;'
                 green: !lambda 'return id(color_work_g) / 255.0f;'
                 blue: !lambda 'return id(color_work_b) / 255.0f;'
-                color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
+                color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
             - delay: 500ms
             - light.addressable_set:
                 id: ws2812_strip
@@ -477,7 +476,7 @@ script:
                 if (!s.empty() && s[0] == '#') {
                   s.erase(0, 1);
                 }
-                int r = 0, g = 255, b = 0;
+                int r = 204, g = 0, b = 200;
                 if (s.length() == 6) {
                   char *end = nullptr;
                   unsigned long v = strtoul(s.c_str(), &end, 16);
@@ -497,7 +496,7 @@ script:
                 red: !lambda 'return id(color_work_r) / 255.0f;'
                 green: !lambda 'return id(color_work_g) / 255.0f;'
                 blue: !lambda 'return id(color_work_b) / 255.0f;'
-                color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
+                color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
 
   - id: set_indicator_off_state
     parameters:
@@ -525,7 +524,7 @@ script:
                       if (!s.empty() && s[0] == '#') {
                         s.erase(0, 1);
                       }
-                      int r = 255, g = 0, b = 0;
+                      int r = 5, g = 204, b = 0;
                       if (s.length() == 6) {
                         char *end = nullptr;
                         unsigned long v = strtoul(s.c_str(), &end, 16);
@@ -545,7 +544,7 @@ script:
                       red: !lambda 'return id(color_work_r) / 255.0f;'
                       green: !lambda 'return id(color_work_g) / 255.0f;'
                       blue: !lambda 'return id(color_work_b) / 255.0f;'
-                      color_brightness: !lambda 'return id(indicator_brightness).state / 100.0f;'
+                      color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
                 else:
                   - light.addressable_set:
                       id: ws2812_strip
