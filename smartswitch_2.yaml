@@ -8,30 +8,15 @@ external_components:
       path: components
 
 # 双路固件：沿用三路板上的通道 1 与 3（GPIO12/14/LED0 + GPIO5/2/LED2）；灯带仍为 3 颗，中间不占用
-preferences:
-  flash_write_interval: 0s
-
 esphome:
   name: $devicename
   on_boot:
-    - priority: 900
-      then:
-        - lambda: |-
-            ESP_LOGI("smartswitch", "BOOT restored prefs: on=%s off=%s bri=%.0f lux_thr=%.0f ha_ent=%s d1=%d d2=%d curtain=%d",
-                     id(indicator_on_color_hex).state.c_str(), id(indicator_off_color_hex).state.c_str(),
-                     id(indicator_brightness).state, id(illuminance_dark_threshold).state,
-                     id(ha_illuminance_entity_id).state.c_str(),
-                     (int) id(channel_1_button_decouple).state, (int) id(channel_2_button_decouple).state,
-                     (int) id(curtain_mode).state);
+    # boot_complete 须在 setup 之后置位（priority 越小越晚）；过早 refresh 写 LED2 会导致 Neopixel 崩溃
     - priority: -100
       then:
-        - delay: 800ms
-        - lambda: |-
-            id(config_save_enabled) = true;
-            ESP_LOGI("smartswitch", "config_save_enabled=true (after UI restore settled)");
         - delay: 100ms
+        - script.execute: sync_indicator_colors_from_hex
         - lambda: 'id(boot_complete) = true;'
-        - lambda: 'ESP_LOGI("smartswitch", "boot_complete=true, refresh_all_indicators");'
         - script.execute: refresh_all_indicators
     - priority: 200
       then:
@@ -42,15 +27,11 @@ esphome:
                 wifi.connected:
             then:
               - script.execute: wifi_disconnect_blink
-  on_shutdown:
-    - lambda: 'global_preferences->sync();'
 
 esp8266:
   board: esp01_1m
-  restore_from_flash: true
 
 logger:
-  level: INFO
 
 api:
 
@@ -75,7 +56,6 @@ captive_portal:
 
 web_server:
   port: 80
-  version: 2
   include_internal: false
 
 globals:
@@ -83,30 +63,30 @@ globals:
     type: bool
     restore_value: no
     initial_value: 'false'
-  - id: config_save_enabled
-    type: bool
-    restore_value: no
-    initial_value: 'false'
-  - id: decoupled_led_1
-    type: bool
-    restore_value: true
-    initial_value: 'false'
-  - id: decoupled_led_2
-    type: bool
-    restore_value: true
-    initial_value: 'false'
-  - id: color_work_r
+  - id: on_color_r
     type: int
     restore_value: no
-    initial_value: '0'
-  - id: color_work_g
+    initial_value: '193'
+  - id: on_color_g
     type: int
     restore_value: no
-    initial_value: '255'
-  - id: color_work_b
+    initial_value: '6'
+  - id: on_color_b
     type: int
     restore_value: no
-    initial_value: '0'
+    initial_value: '190'
+  - id: off_color_r
+    type: int
+    restore_value: no
+    initial_value: '22'
+  - id: off_color_g
+    type: int
+    restore_value: no
+    initial_value: '193'
+  - id: off_color_b
+    type: int
+    restore_value: no
+    initial_value: '6'
 
 light:
   - platform: neopixelbus
@@ -114,61 +94,8 @@ light:
     variant: WS2812X
     pin: GPIO4
     num_leds: 3
-    name: "WS2812 Strip"
     id: ws2812_strip
     internal: true
-
-  - platform: partition
-    name: "Channel 1 LED"
-    id: indicator_1
-    segments:
-      - id: ws2812_strip
-        from: 0
-        to: 0
-    on_turn_on:
-      - if:
-          condition:
-            switch.is_on: channel_1_button_decouple
-          then:
-            - lambda: 'id(decoupled_led_1) = true;'
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 0
-    on_turn_off:
-      - if:
-          condition:
-            switch.is_on: channel_1_button_decouple
-          then:
-            - lambda: 'id(decoupled_led_1) = false;'
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 0
-
-  - platform: partition
-    name: "Channel 2 LED"
-    id: indicator_2
-    segments:
-      - id: ws2812_strip
-        from: 2
-        to: 2
-    on_turn_on:
-      - if:
-          condition:
-            switch.is_on: channel_2_button_decouple
-          then:
-            - lambda: 'id(decoupled_led_2) = true;'
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 2
-    on_turn_off:
-      - if:
-          condition:
-            switch.is_on: channel_2_button_decouple
-          then:
-            - lambda: 'id(decoupled_led_2) = false;'
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 2
 
 switch:
   - platform: gpio
@@ -182,23 +109,13 @@ switch:
             switch.is_on: curtain_mode
           then:
             - switch.turn_off: relay_2
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_1_button_decouple
-          then:
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 0
+      - script.execute:
+          id: set_indicator_on_state
+          led_index: 0
     on_turn_off:
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_1_button_decouple
-          then:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 0
+      - script.execute:
+          id: set_indicator_off_state
+          led_index: 0
 
   - platform: gpio
     pin: GPIO5
@@ -211,51 +128,18 @@ switch:
             switch.is_on: curtain_mode
           then:
             - switch.turn_off: relay_1
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_2_button_decouple
-          then:
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 2
+      - script.execute:
+          id: set_indicator_on_state
+          led_index: 2
     on_turn_off:
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_2_button_decouple
-          then:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 2
-
-  - platform: template
-    name: "Channel 1 Button Decouple"
-    id: channel_1_button_decouple
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
-    entity_category: config
-    icon: mdi:gesture-tap-button
-    on_turn_on:
-      - script.execute: refresh_all_indicators
-    on_turn_off:
-      - script.execute: refresh_all_indicators
-
-  - platform: template
-    name: "Channel 2 Button Decouple"
-    id: channel_2_button_decouple
-    optimistic: true
-    restore_mode: RESTORE_DEFAULT_OFF
-    entity_category: config
-    icon: mdi:gesture-tap-button
-    on_turn_on:
-      - script.execute: refresh_all_indicators
-    on_turn_off:
-      - script.execute: refresh_all_indicators
+      - script.execute:
+          id: set_indicator_off_state
+          led_index: 2
 
   - platform: template
     name: "Curtain Mode"
     id: curtain_mode
+    disabled_by_default: true
     optimistic: true
     restore_mode: RESTORE_DEFAULT_OFF
     entity_category: config
@@ -274,29 +158,19 @@ binary_sensor:
     pin:
       number: GPIO14
       mode: {input: true, pullup: true}
-    name: "Button 1"
     id: button_1
+    internal: true
     on_release:
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_1_button_decouple
-          then:
-            - switch.toggle: relay_1
+      - switch.toggle: relay_1
 
   - platform: gpio
     pin:
       number: GPIO2
       mode: {input: true, pullup: true}
-    name: "Button 2"
     id: button_2
+    internal: true
     on_release:
-      - if:
-          condition:
-            not:
-              switch.is_on: channel_2_button_decouple
-          then:
-            - switch.toggle: relay_2
+      - switch.toggle: relay_2
 
 sensor:
   - platform: ha_entity_sensor
@@ -311,13 +185,13 @@ sensor:
 
   - platform: wifi_signal
     name: $devicename signal
-    update_interval: 300s
-    internal: true
+    update_interval: 60s
 
 text:
   - platform: template
     name: "HA Illuminance Entity ID"
     id: ha_illuminance_entity_id
+    disabled_by_default: true
     optimistic: true
     restore_value: true
     initial_value: "${ha_illuminance_entity}"
@@ -327,14 +201,6 @@ text:
     entity_category: config
     icon: mdi:home-assistant
     on_value:
-      - lambda: |-
-          if (!id(config_save_enabled)) {
-            ESP_LOGI("smartswitch", "SAVE ha_entity ignored (init) ui=%s",
-                     id(ha_illuminance_entity_id).state.c_str());
-            return;
-          }
-          ESP_LOGI("smartswitch", "SAVE ha_entity=%s", id(ha_illuminance_entity_id).state.c_str());
-      - lambda: 'global_preferences->sync();'
       - if:
           condition:
             lambda: 'return id(boot_complete);'
@@ -344,63 +210,42 @@ text:
                 App.safe_reboot();
 
   - platform: template
-    name: "Relay On LED Color"
-    id: indicator_on_color_hex
+    name: "Indicator On Color"
+    id: indicator_on_color
+    disabled_by_default: true
     optimistic: true
     restore_value: true
-    initial_value: "#cc00c8"
-    min_length: 6
+    initial_value: "#c106be"
+    min_length: 7
     max_length: 7
     mode: text
     entity_category: config
     icon: mdi:palette
     on_value:
-      - lambda: |-
-          if (!id(config_save_enabled)) {
-            ESP_LOGI("smartswitch", "SAVE on_color ignored (init) ui=%s",
-                     id(indicator_on_color_hex).state.c_str());
-            return;
-          }
-          ESP_LOGI("smartswitch", "SAVE on_color=%s", id(indicator_on_color_hex).state.c_str());
-      - lambda: 'global_preferences->sync();'
-      - if:
-          condition:
-            lambda: 'return id(boot_complete);'
-          then:
-            - delay: 400ms
-            - script.execute: refresh_all_indicators
+      - script.execute: sync_indicator_colors_from_hex
+      - script.execute: refresh_all_indicators
 
   - platform: template
-    name: "Relay Off LED Color"
-    id: indicator_off_color_hex
+    name: "Indicator Off Color"
+    id: indicator_off_color
+    disabled_by_default: true
     optimistic: true
     restore_value: true
-    initial_value: "#05cc00"
-    min_length: 6
+    initial_value: "#16c106"
+    min_length: 7
     max_length: 7
     mode: text
     entity_category: config
     icon: mdi:palette-outline
     on_value:
-      - lambda: |-
-          if (!id(config_save_enabled)) {
-            ESP_LOGI("smartswitch", "SAVE off_color ignored (init) ui=%s",
-                     id(indicator_off_color_hex).state.c_str());
-            return;
-          }
-          ESP_LOGI("smartswitch", "SAVE off_color=%s", id(indicator_off_color_hex).state.c_str());
-      - lambda: 'global_preferences->sync();'
-      - if:
-          condition:
-            lambda: 'return id(boot_complete);'
-          then:
-            - delay: 400ms
-            - script.execute: refresh_all_indicators
+      - script.execute: sync_indicator_colors_from_hex
+      - script.execute: refresh_all_indicators
 
 number:
   - platform: template
     name: "Illuminance Dark Threshold"
     id: illuminance_dark_threshold
+    disabled_by_default: true
     optimistic: true
     restore_value: true
     min_value: 0
@@ -411,90 +256,49 @@ number:
     entity_category: config
     icon: mdi:brightness-5
     on_value:
-      - lambda: |-
-          if (!id(config_save_enabled)) return;
-          ESP_LOGI("smartswitch", "SAVE lux_thr=%.0f", id(illuminance_dark_threshold).state);
-      - lambda: 'global_preferences->sync();'
-      - if:
-          condition:
-            lambda: 'return id(boot_complete);'
-          then:
-            - script.execute: refresh_all_indicators
+      - script.execute: refresh_all_indicators
 
   - platform: template
     name: "Indicator Brightness"
     id: indicator_brightness
+    disabled_by_default: true
     optimistic: true
     restore_value: true
     min_value: 0
     max_value: 255
     step: 1
-    initial_value: 40
+    initial_value: 64
     mode: slider
     entity_category: config
     icon: mdi:brightness-6
     on_value:
-      - lambda: |-
-          if (!id(config_save_enabled)) return;
-          ESP_LOGI("smartswitch", "SAVE brightness=%.0f", id(indicator_brightness).state);
-      - lambda: 'global_preferences->sync();'
-      - if:
-          condition:
-            lambda: 'return id(boot_complete);'
-          then:
-            - script.execute: refresh_all_indicators
+      - script.execute: refresh_all_indicators
 
 text_sensor:
   - platform: wifi_info
     ip_address:
       name: $devicename IP Address
       icon: mdi:ip-network
-      internal: true
 
 script:
-  - id: parse_on_color_hex
+  - id: sync_indicator_colors_from_hex
     mode: restart
     then:
       - lambda: |-
-          std::string s = id(indicator_on_color_hex).state;
-          if (!s.empty() && s[0] == '#') {
-            s.erase(0, 1);
-          }
-          int r = 204, g = 0, b = 200;
-          if (s.length() == 6) {
-            char *end = nullptr;
-            unsigned long v = strtoul(s.c_str(), &end, 16);
-            if (end == s.c_str() + 6) {
-              r = (v >> 16) & 0xFF;
-              g = (v >> 8) & 0xFF;
-              b = v & 0xFF;
+          auto parse = [](const std::string &in, int &r, int &g, int &b) {
+            std::string s = in;
+            if (!s.empty() && s[0] == '#')
+              s = s.substr(1);
+            r = g = b = 0;
+            unsigned int ur = 0, ug = 0, ub = 0;
+            if (s.size() >= 6 && sscanf(s.c_str(), "%2x%2x%2x", &ur, &ug, &ub) == 3) {
+              r = (int) ur;
+              g = (int) ug;
+              b = (int) ub;
             }
-          }
-          id(color_work_r) = r;
-          id(color_work_g) = g;
-          id(color_work_b) = b;
-
-  - id: parse_off_color_hex
-    mode: restart
-    then:
-      - lambda: |-
-          std::string s = id(indicator_off_color_hex).state;
-          if (!s.empty() && s[0] == '#') {
-            s.erase(0, 1);
-          }
-          int r = 5, g = 204, b = 0;
-          if (s.length() == 6) {
-            char *end = nullptr;
-            unsigned long v = strtoul(s.c_str(), &end, 16);
-            if (end == s.c_str() + 6) {
-              r = (v >> 16) & 0xFF;
-              g = (v >> 8) & 0xFF;
-              b = v & 0xFF;
-            }
-          }
-          id(color_work_r) = r;
-          id(color_work_g) = g;
-          id(color_work_b) = b;
+          };
+          parse(id(indicator_on_color).state, id(on_color_r), id(on_color_g), id(on_color_b));
+          parse(id(indicator_off_color).state, id(off_color_r), id(off_color_g), id(off_color_b));
 
   - id: wifi_disconnect_blink
     mode: restart
@@ -504,14 +308,13 @@ script:
             not:
               wifi.connected:
           then:
-            - script.execute: parse_off_color_hex
             - light.addressable_set:
                 id: ws2812_strip
                 range_from: 0
                 range_to: 0
-                red: !lambda 'return id(color_work_r) / 255.0f;'
-                green: !lambda 'return id(color_work_g) / 255.0f;'
-                blue: !lambda 'return id(color_work_b) / 255.0f;'
+                red: !lambda 'return id(off_color_r) / 255.0f;'
+                green: !lambda 'return id(off_color_g) / 255.0f;'
+                blue: !lambda 'return id(off_color_b) / 255.0f;'
                 color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
             - delay: 500ms
             - light.addressable_set:
@@ -523,99 +326,55 @@ script:
                 blue: 0%
             - delay: 500ms
 
-  - id: apply_decoupled_led
-    parameters:
-      led_index: int
-    mode: restart
-    then:
-      - if:
-          condition:
-            lambda: |-
-              if (led_index == 0) return id(decoupled_led_1);
-              if (led_index == 2) return id(decoupled_led_2);
-              return false;
-          then:
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: !lambda 'return led_index;'
-          else:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: !lambda 'return led_index;'
-
   - id: restore_indicator_1
     mode: restart
     then:
       - if:
           condition:
-            switch.is_on: channel_1_button_decouple
+            switch.is_on: relay_1
           then:
             - script.execute:
-                id: apply_decoupled_led
+                id: set_indicator_on_state
                 led_index: 0
           else:
-            - if:
-                condition:
-                  switch.is_on: relay_1
-                then:
-                  - script.execute:
-                      id: set_indicator_on_state
-                      led_index: 0
-                else:
-                  - script.execute:
-                      id: set_indicator_off_state
-                      led_index: 0
+            - script.execute:
+                id: set_indicator_off_state
+                led_index: 0
 
   - id: set_indicator_on_state
     parameters:
       led_index: int
-    mode: queued
+    mode: restart
     then:
       - if:
           condition:
-            lambda: 'return id(boot_complete);'
+            and:
+              - lambda: 'return id(boot_complete);'
+              - or:
+                  - lambda: 'return led_index != 0;'
+                  - wifi.connected:
           then:
-            - lambda: |-
-                std::string s = id(indicator_on_color_hex).state;
-                while (!s.empty() && (s.front() == ' ' || s.front() == '\t')) {
-                  s.erase(0, 1);
-                }
-                while (!s.empty() && (s.back() == ' ' || s.back() == '\t')) {
-                  s.pop_back();
-                }
-                if (!s.empty() && s[0] == '#') {
-                  s.erase(0, 1);
-                }
-                int r = 204, g = 0, b = 200;
-                if (s.length() == 6) {
-                  char *end = nullptr;
-                  unsigned long v = strtoul(s.c_str(), &end, 16);
-                  if (end == s.c_str() + 6) {
-                    r = (v >> 16) & 0xFF;
-                    g = (v >> 8) & 0xFF;
-                    b = v & 0xFF;
-                  }
-                }
-                id(color_work_r) = r;
-                id(color_work_g) = g;
-                id(color_work_b) = b;
             - light.addressable_set:
                 id: ws2812_strip
                 range_from: !lambda 'return led_index;'
                 range_to: !lambda 'return led_index;'
-                red: !lambda 'return id(color_work_r) / 255.0f;'
-                green: !lambda 'return id(color_work_g) / 255.0f;'
-                blue: !lambda 'return id(color_work_b) / 255.0f;'
+                red: !lambda 'return id(on_color_r) / 255.0f;'
+                green: !lambda 'return id(on_color_g) / 255.0f;'
+                blue: !lambda 'return id(on_color_b) / 255.0f;'
                 color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
 
   - id: set_indicator_off_state
     parameters:
       led_index: int
-    mode: queued
+    mode: restart
     then:
       - if:
           condition:
-            lambda: 'return id(boot_complete);'
+            and:
+              - lambda: 'return id(boot_complete);'
+              - or:
+                  - lambda: 'return led_index != 0;'
+                  - wifi.connected:
           then:
             - if:
                 condition:
@@ -623,37 +382,13 @@ script:
                     return !isnan(id(outdoor_illumination).state) &&
                            id(outdoor_illumination).state < id(illuminance_dark_threshold).state;
                 then:
-                  - lambda: |-
-                      std::string s = id(indicator_off_color_hex).state;
-                      while (!s.empty() && (s.front() == ' ' || s.front() == '\t')) {
-                        s.erase(0, 1);
-                      }
-                      while (!s.empty() && (s.back() == ' ' || s.back() == '\t')) {
-                        s.pop_back();
-                      }
-                      if (!s.empty() && s[0] == '#') {
-                        s.erase(0, 1);
-                      }
-                      int r = 5, g = 204, b = 0;
-                      if (s.length() == 6) {
-                        char *end = nullptr;
-                        unsigned long v = strtoul(s.c_str(), &end, 16);
-                        if (end == s.c_str() + 6) {
-                          r = (v >> 16) & 0xFF;
-                          g = (v >> 8) & 0xFF;
-                          b = v & 0xFF;
-                        }
-                      }
-                      id(color_work_r) = r;
-                      id(color_work_g) = g;
-                      id(color_work_b) = b;
                   - light.addressable_set:
                       id: ws2812_strip
                       range_from: !lambda 'return led_index;'
                       range_to: !lambda 'return led_index;'
-                      red: !lambda 'return id(color_work_r) / 255.0f;'
-                      green: !lambda 'return id(color_work_g) / 255.0f;'
-                      blue: !lambda 'return id(color_work_b) / 255.0f;'
+                      red: !lambda 'return id(off_color_r) / 255.0f;'
+                      green: !lambda 'return id(off_color_g) / 255.0f;'
+                      blue: !lambda 'return id(off_color_b) / 255.0f;'
                       color_brightness: !lambda 'return id(indicator_brightness).state / 255.0f;'
                 else:
                   - light.addressable_set:
@@ -665,7 +400,7 @@ script:
                       blue: 0%
 
   - id: refresh_all_indicators
-    mode: queued
+    mode: restart
     then:
       - if:
           condition:
@@ -673,42 +408,26 @@ script:
           then:
             - if:
                 condition:
-                  switch.is_on: channel_1_button_decouple
+                  switch.is_on: relay_1
                 then:
                   - script.execute:
-                      id: apply_decoupled_led
+                      id: set_indicator_on_state
                       led_index: 0
                 else:
-                  - if:
-                      condition:
-                        switch.is_on: relay_1
-                      then:
-                        - script.execute:
-                            id: set_indicator_on_state
-                            led_index: 0
-                      else:
-                        - script.execute:
-                            id: set_indicator_off_state
-                            led_index: 0
+                  - script.execute:
+                      id: set_indicator_off_state
+                      led_index: 0
             - if:
                 condition:
-                  switch.is_on: channel_2_button_decouple
+                  switch.is_on: relay_2
                 then:
                   - script.execute:
-                      id: apply_decoupled_led
+                      id: set_indicator_on_state
                       led_index: 2
                 else:
-                  - if:
-                      condition:
-                        switch.is_on: relay_2
-                      then:
-                        - script.execute:
-                            id: set_indicator_on_state
-                            led_index: 2
-                      else:
-                        - script.execute:
-                            id: set_indicator_off_state
-                            led_index: 2
+                  - script.execute:
+                      id: set_indicator_off_state
+                      led_index: 2
             - light.addressable_set:
                 id: ws2812_strip
                 range_from: 1

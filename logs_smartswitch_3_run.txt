@@ -1,0 +1,445 @@
+INFO ESPHome 2025.2.2
+INFO Reading configuration /config/smartswitch_3.yaml...
+INFO Generating C++ source...
+INFO Compiling app...
+Processing smartswitch-3 (board: esp01_1m; framework: arduino; platform: platformio/espressif8266@4.2.1)
+--------------------------------------------------------------------------------
+HARDWARE: ESP8266 80MHz, 80KB RAM, 1MB Flash
+Dependency Graph
+|-- ESPAsyncTCP-esphome @ 2.0.0
+|-- ESPAsyncWebServer-esphome @ 3.2.2
+|-- DNSServer @ 1.1.1
+|-- ESP8266WiFi @ 1.0
+|-- ESP8266mDNS @ 1.2
+|-- ArduinoJson @ 6.18.5
+|-- NeoPixelBus @ 2.7.3
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/api_connection.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/api_frame_helper.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/api_pb2.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/api_pb2_service.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/api_server.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/list_entities.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/proto.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/subscribe_state.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/api/user_services.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/binary_sensor/automation.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/binary_sensor/binary_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/binary_sensor/filter.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/button/button.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/captive_portal/captive_portal.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/esp8266/core.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/esp8266/gpio.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/esp8266/preferences.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/esphome/ota/ota_esphome.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/gpio/binary_sensor/gpio_binary_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/gpio/switch/gpio_switch.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ha_entity_sensor/ha_entity_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/json/json_util.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/addressable_light.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/automation.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/esp_color_correction.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/esp_range_view.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/light_call.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/light_json_schema.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/light_output.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/light/light_state.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger_esp32.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger_esp8266.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger_host.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger_libretiny.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/logger/logger_rp2040.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/md5/md5.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_component.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_esp32.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_esp8266.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_host.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_libretiny.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/mdns/mdns_rp2040.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/network/util.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/number/automation.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/number/number.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/number/number_call.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/number/number_traits.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend_arduino_esp32.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend_arduino_esp8266.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend_arduino_libretiny.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend_arduino_rp2040.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/ota/ota_backend_esp_idf.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/partition/light_partition.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/safe_mode/safe_mode.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/script/script.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/sensor/automation.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/sensor/filter.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/sensor/sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/socket/bsd_sockets_impl.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/socket/lwip_raw_tcp_impl.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/socket/lwip_sockets_impl.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/socket/socket.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/switch/automation.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/switch/switch.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/template/binary_sensor/template_binary_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/template/number/template_number.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/template/switch/template_switch.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/template/text/template_text.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/text/text.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/text/text_call.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/text_sensor/filter.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/text_sensor/text_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/web_server/list_entities.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/web_server/web_server.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/web_server/web_server_v1.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/web_server_base/web_server_base.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component_esp32_arduino.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component_esp8266.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component_esp_idf.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component_libretiny.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi/wifi_component_pico_w.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi_info/wifi_info_text_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/components/wifi_signal/wifi_signal_sensor.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/application.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/component.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/component_iterator.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/controller.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/entity_base.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/helpers.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/log.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/ring_buffer.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/scheduler.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/string_ref.cpp.o
+Compiling .pioenvs/smartswitch-3/src/esphome/core/util.cpp.o
+Compiling .pioenvs/smartswitch-3/src/main.cpp.o
+/config/smartswitch_3.yaml: In lambda function:
+/config/smartswitch_3.yaml:650:14: error: 'btn_channel' was not declared in this scope; did you mean 'channel'?
+  650 |                   channel: !lambda 'return btn_channel;'
+      |              ^    ~~~~~~
+      |              channel
+/config/smartswitch_3.yaml: In lambda function:
+/config/smartswitch_3.yaml:651:14: error: 'btn_click' was not declared in this scope
+  651 |                   click: !lambda 'return btn_click;'
+      |              ^    ~~~~
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h: In instantiation of 'esphome::TemplatableValue<T, X>::TemplatableValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; T = std::__cxx11::basic_string<char>; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]':
+src/esphome/components/api/homeassistant_service.h:18:78:   required from 'esphome::api::TemplatableStringValue<X>::TemplatableStringValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]'
+src/esphome/components/api/homeassistant_service.h:27:108:   required from 'esphome::api::TemplatableKeyValuePair<Ts>::TemplatableKeyValuePair(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+src/esphome/components/api/homeassistant_service.h:39:27:   required from 'void esphome::api::HomeAssistantServiceCallAction<Ts>::add_data(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+/config/smartswitch_3.yaml:651:4:   required from here
+src/esphome/core/automation.h:30:57: error: no matching function for call to 'std::__cxx11::basic_string<char>::basic_string(setup()::<lambda(int, std::string)>&)'
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:652:2: note: candidate: 'template<class _Tp, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Tp&, const _Alloc&) [with _Tp = _Tp; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  652 |  basic_string(const _Tp& __t, const _Alloc& __a = _Alloc())
+      |  ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:652:2: note:   template argument deduction/substitution failed:
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/move.h:57,
+                 from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/stl_pair.h:59,
+                 from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/stl_algobase.h:64,
+                 from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/deque:60,
+                 from src/esphome/components/api/api_frame_helper.h:3,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/type_traits: In substitution of 'template<bool _Cond, class _Tp> using enable_if_t = typename std::enable_if::type [with bool _Cond = false; _Tp = void]':
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:119:8:   required by substitution of 'template<class _CharT, class _Traits, class _Alloc> template<class _Tp, class _Res> using _If_sv = std::enable_if_t<std::__and_<std::is_convertible<const _Tp&, std::basic_string_view<_CharT, _Traits> >, std::__not_<std::is_convertible<const _Tp*, const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>*> >, std::__not_<std::is_convertible<const _Tp&, const _CharT*> > >::value, _Res> [with _Tp = setup()::<lambda(int, std::string)>; _Res = void; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:650:30:   required from 'esphome::TemplatableValue<T, X>::TemplatableValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; T = std::__cxx11::basic_string<char>; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]'
+src/esphome/components/api/homeassistant_service.h:18:78:   required from 'esphome::api::TemplatableStringValue<X>::TemplatableStringValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]'
+src/esphome/components/api/homeassistant_service.h:27:108:   required from 'esphome::api::TemplatableKeyValuePair<Ts>::TemplatableKeyValuePair(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+src/esphome/components/api/homeassistant_service.h:39:27:   required from 'void esphome::api::HomeAssistantServiceCallAction<Ts>::add_data(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+/config/smartswitch_3.yaml:651:4:   required from here
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/type_traits:2554:11: error: no type named 'type' in 'struct std::enable_if<false, void>'
+ 2554 |     using enable_if_t = typename enable_if<_Cond, _Tp>::type;
+      |           ^~~~~~~~~~~
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h: In instantiation of 'esphome::TemplatableValue<T, X>::TemplatableValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; T = std::__cxx11::basic_string<char>; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]':
+src/esphome/components/api/homeassistant_service.h:18:78:   required from 'esphome::api::TemplatableStringValue<X>::TemplatableStringValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]'
+src/esphome/components/api/homeassistant_service.h:27:108:   required from 'esphome::api::TemplatableKeyValuePair<Ts>::TemplatableKeyValuePair(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+src/esphome/components/api/homeassistant_service.h:39:27:   required from 'void esphome::api::HomeAssistantServiceCallAction<Ts>::add_data(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+/config/smartswitch_3.yaml:651:4:   required from here
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:641:2: note: candidate: 'template<class _Tp, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Tp&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _Tp = _Tp; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  641 |  basic_string(const _Tp& __t, size_type __pos, size_type __n,
+      |  ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:641:2: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 4 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:627:9: note: candidate: 'template<class _InputIterator, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(_InputIterator, _InputIterator, const _Alloc&) [with _InputIterator = _InputIterator; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  627 |         basic_string(_InputIterator __beg, _InputIterator __end,
+      |         ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:627:9: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 3 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:589:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&&, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  589 |       basic_string(basic_string&& __str, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:589:7: note:   candidate expects 2 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:585:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  585 |       basic_string(const basic_string& __str, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:585:7: note:   candidate expects 2 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:581:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::initializer_list<_Tp>, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  581 |       basic_string(initializer_list<_CharT> __l, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:581:45: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'std::initializer_list<char>'
+  581 |       basic_string(initializer_list<_CharT> __l, const _Alloc& __a = _Alloc())
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:554:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  554 |       basic_string(basic_string&& __str) noexcept
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:554:35: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'std::__cxx11::basic_string<char>&&'
+  554 |       basic_string(basic_string&& __str) noexcept
+      |                    ~~~~~~~~~~~~~~~^~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:542:7: note: candidate: 'template<class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, _CharT, const _Alloc&) [with <template-parameter-2-1> = <template-parameter-1-1>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  542 |       basic_string(size_type __n, _CharT __c, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:542:7: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 3 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:527:7: note: candidate: 'template<class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _CharT*, const _Alloc&) [with <template-parameter-2-1> = <template-parameter-1-1>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  527 |       basic_string(const _CharT* __s, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:527:7: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:52: note:   cannot convert 'value' (type 'setup()::<lambda(int, std::string)>') to type 'const char*'
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                    ^~~~~
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:512:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _CharT*, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  512 |       basic_string(const _CharT* __s, size_type __n,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:512:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:494:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  494 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:494:7: note:   candidate expects 4 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:478:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  478 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:478:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:463:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  463 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:463:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:450:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  450 |       basic_string(const basic_string& __str)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:450:40: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'const std::__cxx11::basic_string<char>&'
+  450 |       basic_string(const basic_string& __str)
+      |                    ~~~~~~~~~~~~~~~~~~~~^~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:442:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  442 |       basic_string(const _Alloc& __a) _GLIBCXX_NOEXCEPT
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:442:34: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'const std::allocator<char>&'
+  442 |       basic_string(const _Alloc& __a) _GLIBCXX_NOEXCEPT
+      |                    ~~~~~~~~~~~~~~^~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:433:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string() [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  433 |       basic_string()
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:433:7: note:   candidate expects 0 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:147:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::__sv_wrapper, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  147 |       basic_string(__sv_wrapper __svw, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:147:7: note:   candidate expects 2 arguments, 1 provided
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h: In instantiation of 'esphome::TemplatableValue<T, X>::TemplatableValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; T = std::__cxx11::basic_string<char>; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]':
+src/esphome/components/api/homeassistant_service.h:18:78:   required from 'esphome::api::TemplatableStringValue<X>::TemplatableStringValue(F) [with F = setup()::<lambda(int, std::string)>; typename std::enable_if<(! std::is_invocable<F, X ...>::value), int>::type <anonymous> = 0; X = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}]'
+src/esphome/components/api/homeassistant_service.h:27:108:   required from 'esphome::api::TemplatableKeyValuePair<Ts>::TemplatableKeyValuePair(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+src/esphome/components/api/homeassistant_service.h:39:27:   required from 'void esphome::api::HomeAssistantServiceCallAction<Ts>::add_data(std::string, T) [with T = setup()::<lambda(int, std::string)>; Ts = {int, std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >}; std::string = std::__cxx11::basic_string<char>]'
+/config/smartswitch_3.yaml:652:4:   required from here
+src/esphome/core/automation.h:30:57: error: no matching function for call to 'std::__cxx11::basic_string<char>::basic_string(setup()::<lambda(int, std::string)>&)'
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:652:2: note: candidate: 'template<class _Tp, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Tp&, const _Alloc&) [with _Tp = _Tp; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  652 |  basic_string(const _Tp& __t, const _Alloc& __a = _Alloc())
+      |  ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:652:2: note:   template argument deduction/substitution failed:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:641:2: note: candidate: 'template<class _Tp, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Tp&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _Tp = _Tp; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  641 |  basic_string(const _Tp& __t, size_type __pos, size_type __n,
+      |  ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:641:2: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 4 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:627:9: note: candidate: 'template<class _InputIterator, class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(_InputIterator, _InputIterator, const _Alloc&) [with _InputIterator = _InputIterator; <template-parameter-2-2> = <template-parameter-1-2>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  627 |         basic_string(_InputIterator __beg, _InputIterator __end,
+      |         ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:627:9: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 3 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:589:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&&, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  589 |       basic_string(basic_string&& __str, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:589:7: note:   candidate expects 2 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:585:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  585 |       basic_string(const basic_string& __str, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:585:7: note:   candidate expects 2 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:581:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::initializer_list<_Tp>, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  581 |       basic_string(initializer_list<_CharT> __l, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:581:45: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'std::initializer_list<char>'
+  581 |       basic_string(initializer_list<_CharT> __l, const _Alloc& __a = _Alloc())
+      |                    ~~~~~~~~~~~~~~~~~~~~~~~~~^~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:554:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  554 |       basic_string(basic_string&& __str) noexcept
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:554:35: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'std::__cxx11::basic_string<char>&&'
+  554 |       basic_string(basic_string&& __str) noexcept
+      |                    ~~~~~~~~~~~~~~~^~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:542:7: note: candidate: 'template<class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, _CharT, const _Alloc&) [with <template-parameter-2-1> = <template-parameter-1-1>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  542 |       basic_string(size_type __n, _CharT __c, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:542:7: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:57: note:   candidate expects 3 arguments, 1 provided
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                         ^
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:527:7: note: candidate: 'template<class> std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _CharT*, const _Alloc&) [with <template-parameter-2-1> = <template-parameter-1-1>; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  527 |       basic_string(const _CharT* __s, const _Alloc& __a = _Alloc())
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:527:7: note:   template argument deduction/substitution failed:
+In file included from src/esphome/components/api/api_server.h:9,
+                 from src/esphome/components/api/api_connection.h:8,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+src/esphome/core/automation.h:30:52: note:   cannot convert 'value' (type 'setup()::<lambda(int, std::string)>') to type 'const char*'
+   30 |   TemplatableValue(F value) : type_(VALUE), value_(value) {}
+      |                                                    ^~~~~
+In file included from /config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/string:55,
+                 from src/esphome/components/socket/socket.h:3,
+                 from src/esphome/components/api/api_frame_helper.h:14,
+                 from src/esphome/components/api/api_connection.h:5,
+                 from src/esphome.h:3,
+                 from src/main.cpp:3:
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:512:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _CharT*, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  512 |       basic_string(const _CharT* __s, size_type __n,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:512:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:494:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  494 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:494:7: note:   candidate expects 4 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:478:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  478 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:478:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:463:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&, std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>; std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::size_type = unsigned int]'
+  463 |       basic_string(const basic_string& __str, size_type __pos,
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:463:7: note:   candidate expects 3 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:450:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const std::__cxx11::basic_string<_CharT, _Traits, _Alloc>&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  450 |       basic_string(const basic_string& __str)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:450:40: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'const std::__cxx11::basic_string<char>&'
+  450 |       basic_string(const basic_string& __str)
+      |                    ~~~~~~~~~~~~~~~~~~~~^~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:442:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  442 |       basic_string(const _Alloc& __a) _GLIBCXX_NOEXCEPT
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:442:34: note:   no known conversion for argument 1 from 'setup()::<lambda(int, std::string)>' to 'const std::allocator<char>&'
+  442 |       basic_string(const _Alloc& __a) _GLIBCXX_NOEXCEPT
+      |                    ~~~~~~~~~~~~~~^~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:433:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string() [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  433 |       basic_string()
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:433:7: note:   candidate expects 0 arguments, 1 provided
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:147:7: note: candidate: 'std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::basic_string(std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::__sv_wrapper, const _Alloc&) [with _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]'
+  147 |       basic_string(__sv_wrapper __svw, const _Alloc& __a)
+      |       ^~~~~~~~~~~~
+/config/.esphome/platformio/packages/toolchain-xtensa/xtensa-lx106-elf/include/c++/10.3.0/bits/basic_string.h:147:7: note:   candidate expects 2 arguments, 1 provided
+*** [.pioenvs/smartswitch-3/src/main.cpp.o] Error 1
+========================= [FAILED] Took 73.76 seconds =========================
