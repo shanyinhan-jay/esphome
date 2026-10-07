@@ -12,11 +12,14 @@ static const char *const TAG = "ha_entity_sensor";
 float HaEntitySensor::get_setup_priority() const { return setup_priority::AFTER_CONNECTION; }
 
 void HaEntitySensor::setup() {
-  if (this->entity_id_text_ == nullptr) {
-    ESP_LOGE(TAG, "entity_id text not configured");
+  if (this->entity_id_global_ != nullptr) {
+    this->entity_id_storage_ = this->entity_id_global_->value();
+  } else if (this->entity_id_text_ != nullptr) {
+    this->entity_id_storage_ = this->entity_id_text_->state;
+  } else {
+    ESP_LOGE(TAG, "entity_id not configured");
     return;
   }
-  this->entity_id_storage_ = this->entity_id_text_->state;
   if (this->entity_id_storage_.empty()) {
     ESP_LOGW(TAG, "entity_id text is empty");
     return;
@@ -34,7 +37,8 @@ void HaEntitySensor::setup() {
         this->publish_state(*val);
       });
 
-  ESP_LOGI(TAG, "Subscribed to Home Assistant entity '%s'", this->entity_id_storage_.c_str());
+  ESP_LOGI(TAG, "Subscribed to HA entity '%s' (text=%s)", this->entity_id_storage_.c_str(),
+           this->entity_id_text_ != nullptr ? this->entity_id_text_->state.c_str() : "?");
 }
 
 }  // namespace ha_entity_sensor

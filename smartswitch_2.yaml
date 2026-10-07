@@ -11,8 +11,10 @@ external_components:
 esphome:
   name: $devicename
   on_boot:
-    - priority: 600
+    # boot_complete 须在 setup 之后置位（priority 越小越晚）；过早 refresh 写 LED2 会导致 Neopixel 崩溃
+    - priority: -100
       then:
+        - delay: 100ms
         - lambda: 'id(boot_complete) = true;'
         - script.execute: refresh_all_indicators
     - priority: 200
@@ -438,30 +440,34 @@ script:
     then:
       - if:
           condition:
-            switch.is_on: relay_1
+            lambda: 'return id(boot_complete);'
           then:
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 0
-          else:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 0
-      - if:
-          condition:
-            switch.is_on: relay_2
-          then:
-            - script.execute:
-                id: set_indicator_on_state
-                led_index: 2
-          else:
-            - script.execute:
-                id: set_indicator_off_state
-                led_index: 2
-      - light.addressable_set:
-          id: ws2812_strip
-          range_from: 1
-          range_to: 1
-          red: 0%
-          green: 0%
-          blue: 0%
+            - if:
+                condition:
+                  switch.is_on: relay_1
+                then:
+                  - script.execute:
+                      id: set_indicator_on_state
+                      led_index: 0
+                else:
+                  - script.execute:
+                      id: set_indicator_off_state
+                      led_index: 0
+            - if:
+                condition:
+                  switch.is_on: relay_2
+                then:
+                  - script.execute:
+                      id: set_indicator_on_state
+                      led_index: 2
+                else:
+                  - script.execute:
+                      id: set_indicator_off_state
+                      led_index: 2
+            - light.addressable_set:
+                id: ws2812_strip
+                range_from: 1
+                range_to: 1
+                red: 0%
+                green: 0%
+                blue: 0%
